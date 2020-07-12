@@ -1,0 +1,149 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{xcolor}
+\usepackage{bm}
+\usepackage{hyperref}
+\usepackage{xparse}
+\usepackage{mathrsfs}
+
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+    citecolor=blue
+}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{bnd}{Bound}
+
+\NewDocumentCommand{\snewtheorem}{m o m}
+ {
+  \IfNoValueTF{#2}
+   {
+    \newtheorem{sec#1}{#3}[section]
+    \newtheorem{subsec#1}{#3}[subsection]
+   }
+   {
+    \newtheorem{sec#1}[sec#2]{#3}
+    \newtheorem{subsec#1}[subsec#2]{#3}
+   }
+  \newenvironment{#1}
+   {\ifnum\value{subsection}>0
+      \csname subsec#1\expandafter\endcsname
+    \else
+      \csname sec#1\expandafter\endcsname
+    \fi}
+   {\ifnum\value{subsection}>0 
+      \csname endsubsec#1\expandafter\endcsname
+    \else
+      \csname endsec#1\expandafter\endcsname
+    \fi}
+}
+
+\snewtheorem{lem}{Lemma}
+\snewtheorem{rmk}{Remark}
+\snewtheorem{cor}{Corollary}
+\snewtheorem{red}{Reduction}
+
+
+\DeclareMathOperator{\minto}{\bm{\mathsf{minto}}}
+\DeclareMathOperator{\minout}{\bm{\mathsf{minout}}}
+\DeclareMathOperator{\out}{\bm{\mathsf{out}}}
+\DeclareMathOperator{\into}{\bm{\mathsf{into}}}
+\DeclareMathOperator{\Conn}{\bm{\mathsf{Conn}}}
+
+\newcommand{\hide}[1]{}
+\newcommand{\edit}[1]{}%\textcolor{red}{#1}}
+\newcommand{\rough}[1]{}%\textbf{\textcolor{blue}{#1}}}
+\definecolor{darkgreen}{RGB}{75,150,75}
+\newcommand{\review}[1]{}%\textcolor{darkgreen}{#1}}
+\newcommand{\dc}[1]{}%\textcolor{orange}{dc: #1}}
+\newcommand{\zh}[1]{}%\textcolor{blue}{zh: #1}}
+
+
+\title{Shorter Super-Trees using Dyadic Sequence Dominators}
+\author{Zach Hunter}
+\date{July 2020}
+
+\begin{document}
+
+\maketitle
+\section{Introduction}
+
+In 2019, Defant, Kravitz and Sah introduced several ``super-tree'' problems. \hide{arXiv:1908.03197v2} In this paper, we provide a polynomial upper bound for X, when previous the upper bound was of the form $k^{\frac{1}{2}\log(k)(1+o(1))}$.
+
+This is done by focusing on something that we will call sequence dominators, which were a key tool in the paper of Defant et al.
+
+
+\section{Preliminaries}
+
+Define d-ary trees.
+
+Through this paper, a word $\textbf{a} = a_1,a_2,\dots a_n$ is a finite sequence of positive integers. For a word, $\textbf{a} = a_1,a_2,\dots a_n$, we say $|\textbf{a}| := n$ , $\ell(\textbf{a}) := \sum_{t=1}^n a_t$, and $M(\textbf{a}):= \max_{1 \le i \le n}\{a_i\}$.
+
+Let $\textbf{a} =a_1,\dots,a_n,\textbf{b} = b_1,\dots,b_m$ be words. We say that $\textbf{a}\preceq \textbf{b}$ (or $\textbf{b}$ dominates $\textbf{a}$) if there exists $1 \le x_1<x_2\dots <x_i\le m$, such that $b_{x_j} \ge a_j$ for $j < i$, and $b_{x_i} \ge \sum_{t=i}^n a_t$, and we say that $x_1,\dots x_i$ is an embeds $\textbf{a}$ into $\textbf{b}$. Similarly, if there exists  a sequence $1\le x_1 < \dots <x_n\le m$ that embeds $\textbf{a}$ into $\textbf{b}$, then we say that $\textbf{a}\le \textbf{b}$.
+
+
+We now will explain the motivation for this definition.
+
+Let $A_k$ be the set of words $\textbf{a}$ such that $\ell(\textbf{a})=k$, and let $A_k'$ be the subset of $A_k$ of words $\textbf{a}$ such that $M(\textbf{a}) \le k/2$. (the words in $A_k$ are supposed to correspond to a sequence of values $s_i$ in the siphon argument of theorem 2.5. for niceness, we've ignored that some vertices belong to the trunk, instead pretending the size of the branches sum to $k$.)
+
+Then, converting theorem 2.5 into our own language. 
+
+\textbf{Theorem:} Let $\textbf{b}$, $|\textbf{b}|=m$, be a sequence such that $\textbf{a}\preceq \textbf{b}$ for all $\textbf{a} \in A_k'$. Then, letting $\xi_i$ denote an $i$-universal tree for all $i<k$, we can construct a $k$-universal tree like so. Start with the $m-1$-spine. Glue $\xi_{b_i}$ to the left and right leaves of the $i$-th vertebra, for $i < m$. Then, glue $\xi_{b_m}$ to the center leaf of the $m-1$-th vertebra.
+
+
+Brief proof? (perhaps sketch ideas and then put proper proof in appendix?)
+
+
+\section{Construction}
+
+For a word $\textbf{a} = a_1,\dots ,a_n$, we say $\textbf{a}[i,j] = a_i,\dots, a_j$. For two words $\textbf{a},\textbf{b}$ of lengths $n,m$ respectively, we denote $(\textbf{a}+\textbf{b})$ as a word with $n+m$ letters such that $(\textbf{a}+\textbf{b})[1,n] = \textbf{a}, (\textbf{a}+\textbf{b})[n+1,n+m] = \textbf{b}$.
+
+Let $f(\textbf{a},\textbf{b}) = \sum_{t=1}^i a_t$ where $i$ is the maximum integer such that $\textbf{a}[1,i] \le \textbf{b}$.
+
+\textbf{Remark 1:} $f(\textbf{a}_1+\textbf{a}_2,\textbf{b}) \ge f(\textbf{a}_1,\textbf{b})\le f(\textbf{a}_1,\textbf{a}_1) = \ell(\textbf{a}_1)$ and equality must hold on at least one side.
+
+\textbf{Proof:} The inequalities are trivial. Meanwhile, we can prove the claim about equality like so. Suppose that equality does not hold in the left inequality. It follows that $\textbf{b}$ cannot dominate $\textbf{a}_1$. In turn, this implies that $b$ cannot dominate $\textbf{a}_1 +\textbf{a}_2$ any better. 
+
+\textbf{Remark 2:} suppose $x\ge y\ge z$, it follows that $f(\textbf{a}+[y],\textbf{b}+[x]) \ge f(\textbf{a}+[z],\textbf{b}+[x])$.
+
+\textbf{Proof:} Case 1: $\textbf{a} \not \le \textbf{b}$, we can at most embed $i<n$ letters of $\textbf{a}$ into $\textbf{b}$. It follows that then $f(\textbf{a}+[y],\textbf{b}+[x])  =f(\textbf{a}+[z],\textbf{b}+[x])  = f(\textbf{a},\textbf{b}+[x])$. 
+
+Case 2: If $\textbf{a}\le \textbf{b}$, then since $x \ge y\ge z$, we can the last letter in $\textbf{a}+[y]$ into the last letter of $\textbf{b}+[x]$, giving $\textbf{a}+[z]\le \textbf{a}+[y]\le \textbf{b}+[x]$. Thus $f(\textbf{a}+[y],\textbf{b}+[x]) = \sum_{t=1}^n a_t +y = f(\textbf{a}+[z],\textbf{b}+[x]) +(y-z)$. As $y \ge z$ we are done. $\blacksquare$
+
+
+We let $\textbf{bin}(n) = b_1,\dots b_{2^n}$ where $b_i$ is the largest power of $2$ which divides $i$.
+
+
+
+\textbf{Remark 3:} $\textbf{bin}(n)\le \textbf{bin}(n+1)[2^n+1,2^{n+1}]$.
+
+
+
+\textbf{Remark 4:} for $n \ge 0$, we have $f(\textbf{a},\textbf{bin}(n))\ge 2^{n-1} $ for all $\textbf{a} \in A_{2^{n}}$
+
+\textbf{Proof:} We proceed by induction. This is trivially  when $n = 0$ as $A_1 = \{[1]\},\textbf{bin}(0) = [1]$.
+
+We now consider $n \ge 1$. Suppose for sake of contradiction there was $\textbf{a} \in A_{2^n}$ such that $f(\textbf{a},\textbf{bin}(n))<2^{n-1}$. There must exist a minimal $i$ such that $\sum_{t=1}^{i} a_t \ge 2^{n-1}$. 
+
+By Remark 1, if $\textbf{a}$ is a counter-example to our claim, we must have $f(\textbf{a}[1,i],\textbf{b})<2^{n-1}$. WLOG, we may assume $\sum_{t=1}^i a_t = 2^{n-1}$, as $a_i \le 2^n = \textbf{bin}(n)[n]$, allowing us to apply Remark 2.
+
+Now, there must be a minimal $i_2$ such that $\sum_{t=1}^{i_2} a_t \ge 2^{n-2}$. Suppose for sake of contradiction that $\textbf{a}[1,i_2] \not\le \textbf{bin}(n)[1,2^{n-1}] = \textbf{bin}(n-1)$. By minimality of $i_2$ it follows that $f(\textbf{a}[1,i_2],\textbf{bin}(n-1)) < 2^{n-2}\le \ell(\textbf{a}[1,i_2])$. Thus, by Remark 1, we must have that $f(\textbf{a}[1,i],\textbf{b}) = f(\textbf{a}[1,i_2],\textbf{b})<2^{n-2}$. This contradicts the inductive hypothesis as $\textbf{a}[1,i] \in A_{2^{n-1}}$. Thus, we must have $\textbf{a}[1,i_2]\le \textbf{bin}(n)[1,2^{n-1}]$.
+
+Repeating the above argument, we must have that $\textbf{a}[i_2+1,i] \le \textbf{bin}(n)[2^{n-1}+1,2^n]$. (making use of Remark 3)
+
+\textbf{Theorem 1:} $\textbf{a} \preceq \textbf{bin}(n-1)+\textbf{bin}(n-1)+2^{n-1}$ for all $\textbf{a} \in A'_{2^n}$.
+
+Suppose for sake of contradiction, that this did not hold for some $\textbf{a} \in A'_{2^n}$, for some $n$. Obviously, by definition of $A'$, we know $\ell(\textbf{a}) = 2^n$ and $M(\textbf{a}) \le 2^{n-1}$. 
+
+Let $|\textbf{a}| = m$. It is clear that there exists $1\le i<j \le m$ such that $\ell(\textbf{a}[1,i-1])<2^{n-2}\le \ell(\textbf{a}_1:=\textbf{a}[1,i])$ and $\ell(\textbf{a}[i+1,j-1])<2^{n-2}\le \ell(\textbf{a}_2:=\textbf{a}[i+1,i+j])$. By Remark 4, it follows that $\textbf{a}[1,i] \le \textbf{bin}(n-1),\textbf{bin}[i+1,i+j] \le \textbf{bin}(n-1)$. Furthermore, we must have that $\ell(\textbf{a}_3:=\textbf{a}[i+j+1,m]) \le 2^n-2^{n-2}-2^{n-2} = 2^{n-1}$, recalling the lengths of $\textbf{a},\textbf{a}_1$ and $\textbf{a}_3$. 
+
+Hence, we may embed $\textbf{a}_1$ into the first copy of $\textbf{bin}(n-1)$, by Remark 4. For the same reasons, $\textbf{a}_2$ can be embedded in the second copy of $\textbf{bin}(n-1)$. And then, finally we can tail-embed $\textbf{a}_3$ into $2^{n-1}$. Hence $\textbf{a} \preceq \textbf{bin}(n-1)+\textbf{bin}(n-1)+2^{n-1}$ as desired.
+
+\end{document}
