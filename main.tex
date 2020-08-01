@@ -101,7 +101,19 @@ Then, converting theorem 2.5 into our own language.
 Brief proof? (perhaps sketch ideas and then put proper proof in appendix?)
 
 
-\section{Construction}
+Let $B_n$ denote the set of words $\textbf{b}$ such that $M(\textbf{b})<n$ and $\textbf{a}\preceq \textbf{b}$ for all $\textbf{a} \in A'_n$.
+
+
+\textbf{Definition:} for a function $f: \textbf{N}\to \textbf{R}$ and word $\textbf{b}$, we say $f(\textbf{b}):= \sum_{t=1}^{|\textbf{b}|} f(b_t)$.
+
+\textbf{Question 1:} what is the asymptotically largest function $f_-$ with $f_-(1) =1$, such that for all $n$, if $\textbf{b}\in B_n$, we have $f_-(\textbf{b}) \ge  f_-(n)$.
+
+\textbf{Question 2:} what is the asymptotically smallest function $f_+$ with $f_+(1) = 1$, such that for all $n$, there exists a word $\textbf{b}\in B_n$ where $f_+(\textbf{b}) \le  f_+(n)$.
+
+In the following sections we will show that $f_-(n) = \Omega\left(\frac{n^2}{\log_2(n)}\right)$, and $f_+(n) = O(n^{\log_2(7)})$.
+
+
+\section{Upper Bound}
 
 For a word $\textbf{a} = a_1,\dots ,a_n$, we say $\textbf{a}[i,j] = a_i,\dots, a_j$. For two words $\textbf{a},\textbf{b}$ of lengths $n,m$ respectively, we denote $(\textbf{a}+\textbf{b})$ as a word with $n+m$ letters such that $(\textbf{a}+\textbf{b})[1,n] = \textbf{a}, (\textbf{a}+\textbf{b})[n+1,n+m] = \textbf{b}$.
 
@@ -145,5 +157,28 @@ Suppose for sake of contradiction, that this did not hold for some $\textbf{a} \
 Let $|\textbf{a}| = m$. It is clear that there exists $1\le i<j \le m$ such that $\ell(\textbf{a}[1,i-1])<2^{n-2}\le \ell(\textbf{a}_1:=\textbf{a}[1,i])$ and $\ell(\textbf{a}[i+1,j-1])<2^{n-2}\le \ell(\textbf{a}_2:=\textbf{a}[i+1,i+j])$. By Remark 4, it follows that $\textbf{a}[1,i] \le \textbf{bin}(n-1),\textbf{bin}[i+1,i+j] \le \textbf{bin}(n-1)$. Furthermore, we must have that $\ell(\textbf{a}_3:=\textbf{a}[i+j+1,m]) \le 2^n-2^{n-2}-2^{n-2} = 2^{n-1}$, recalling the lengths of $\textbf{a},\textbf{a}_1$ and $\textbf{a}_3$. 
 
 Hence, we may embed $\textbf{a}_1$ into the first copy of $\textbf{bin}(n-1)$, by Remark 4. For the same reasons, $\textbf{a}_2$ can be embedded in the second copy of $\textbf{bin}(n-1)$. And then, finally we can tail-embed $\textbf{a}_3$ into $2^{n-1}$. Hence $\textbf{a} \preceq \textbf{bin}(n-1)+\textbf{bin}(n-1)+2^{n-1}$ as desired.
+
+
+\textbf{Lower Bound}
+
+We will now set a lower bound on the extent to which this strategy can go. 
+
+For a word $\textbf{a} = a_1, \dots, a_t$, let $Sort(\textbf{a}) := a_{\sigma(1)}, \dots a_{\sigma(t)}$ where $\sigma$ is a (not necessarily unique) permutation such that $a_{\sigma(1)}\le a_{\sigma(2)} \le  \dots a_{\sigma(t)}$. Furthermore for a set of words $X$, let $Sort(X):= \{ Sort(\textbf{w}): \textbf{w} \in X\}$.
+
+Obviously, as $Sort(A_n') \subseteq A_n'$, if $\textbf{b} \in B_n$, then $\textbf{a} \preceq \textbf{b}$ for all $\textbf{a} \in Sort(A_n')$. Thus, defining $B_n^\bigstar $ as the words $\textbf{b} \in [n-1]^*$ such that $\textbf{a} \preceq \textbf{b}$ for all $\textbf{a} \in Sort(A_n')$, we have $B_n^\bigstar \supseteq B_n$.
+
+Hence, with $f(1) = 1, f(n):= \min\{f(\textbf{b}): b \in B_n\}$, and $g(1) = 1, g(n) := \min\{g(\textbf{b}): \textbf{b} \in B_n^\bigstar\}$, we have $f(n) \geq g(n)$ for all $n$.
+
+
+
+\textbf{Remark:} if $Sort(\textbf{a}) \preceq \textbf{b}$ then $Sort(\textbf{a}) \preceq Sort(\textbf{b})$, and same similarly holds for $\le$
+
+
+Now, let $\textbf{log}(n):= Sort( \lfloor n/2 \rfloor,\lfloor n/3 \rfloor, \dots  \lfloor n/(n-1) \rfloor, \lfloor n/n \rfloor)$. We shall prove that $\textbf{a} \le \textbf{log}(n)+ \lfloor n/2 \rfloor $ for all $\textbf{a} \in Sort(A_n')$ and $Sort(A_n') \le \textbf{b} \implies \textbf{log}(n)+ \lfloor n/2 \rfloor  \le \textbf{b}$. (we have that this function has growth rate of roughly $n^{9/5}$)
+
+
+
+
+
 
 \end{document}
