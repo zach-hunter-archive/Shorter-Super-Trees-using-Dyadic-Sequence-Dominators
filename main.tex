@@ -93,6 +93,8 @@ We now will explain the motivation for this definition.
 
 Let $A_k$ be the set of words $\textbf{a}$ such that $\ell(\textbf{a})=k$, and let $A_k'$ be the subset of $A_k$ of words $\textbf{a}$ such that $M(\textbf{a}) \le k/2$. (the words in $A_k$ are supposed to correspond to a sequence of values $s_i$ in the siphon argument of theorem 2.5. for niceness, we've ignored that some vertices belong to the trunk, instead pretending the size of the branches sum to $k$.)
 
+Finally, we will write $W\le \textbf{b}$ if we have $\textbf{w} \le \textbf{b}$ for all $\textbf{w} \in W$. Similarly $W \preceq \textbf{b} \iff \textbf{w} \preceq \textbf{b} \quad \forall \, \textbf{w} \in W$.
+
 Then, converting theorem 2.5 into our own language. 
 
 \textbf{Theorem:} Let $\textbf{b}$, $|\textbf{b}|=m$, be a sequence such that $\textbf{a}\preceq \textbf{b}$ for all $\textbf{a} \in A_k'$. Then, letting $\xi_i$ denote an $i$-universal tree for all $i<k$, we can construct a $k$-universal tree like so. Start with the $m-1$-spine. Glue $\xi_{b_i}$ to the left and right leaves of the $i$-th vertebra, for $i < m$. Then, glue $\xi_{b_m}$ to the center leaf of the $m-1$-th vertebra.
@@ -174,11 +176,36 @@ Hence, with $f(1) = 1, f(n):= \min\{f(\textbf{b}): b \in B_n\}$, and $g(1) = 1, 
 \textbf{Remark:} if $Sort(\textbf{a}) \preceq \textbf{b}$ then $Sort(\textbf{a}) \preceq Sort(\textbf{b})$, and same similarly holds for $\le$
 
 
-Now, let $\textbf{log}(n):= Sort( \lfloor n/2 \rfloor,\lfloor n/3 \rfloor, \dots  \lfloor n/(n-1) \rfloor, \lfloor n/n \rfloor)$. We shall prove that $\textbf{a} \le \textbf{log}(n)+ \lfloor n/2 \rfloor $ for all $\textbf{a} \in Sort(A_n')$ and $Sort(A_n') \le \textbf{b} \implies \textbf{log}(n)+ \lfloor n/2 \rfloor  \le \textbf{b}$. (we have that this function has growth rate of roughly $n^{9/5}$)
+Now, let $\textbf{log}(n):= Sort( \lfloor n/1 \rfloor,\lfloor n/2 \rfloor, \dots  \lfloor n/(n-1) \rfloor, \lfloor n/n \rfloor)$. We shall prove that $Sort(A_n) \le \textbf{log}(n)$ and $Sort(A_n) \le \textbf{b} \implies \textbf{log}(n)  \le \textbf{b}$. (we have that this function has growth rate of roughly $n^{9/5}$)
+
+Cases: largest element is large - idea: g(n/2) + g(n-k)
+
+largest element isn't large - idea g(\textbf{logg}(k))+g(n-k)
+
+There exists $C$ such that $g(n) \ge C n^{1.4}$ for all $n \in [1,3500]$. For $n\ge 900, i \in [1,300], \lfloor n/i\rfloor \ge \lceil n/2i\rceil $. Thus, $g(\lfloor n/i \rfloor) \ge  g(\lceil n/2i\rceil ) \ge C(n/2i)^{1.4} \ge C/4 (n/i)^{1.4}$, as $g$ is increasing.
+
+By strong induction, it follows that $g(n) \ge C/4 n^{1.4}$ for all $n \ge 1$.
+
+\textbf{Proof:} Suppose $Sort(A_n')\preceq \textbf{b}$. Let $\textbf{b} = \textbf{b}'+n-i$.
+
+If $i \le 0.26 n$, then as $\lfloor n/2\rfloor \le \textbf{b}'$, thus\[\implies g(\textbf{b}) \ge g(\lfloor n/2 \rfloor) +g(n-i)\ge C/4( (n/2)^{1.47}+ (n-i)^{1.47}) \]\[\ge C/4 n^{1.4}( (1/2)^{1.4}+ (0.72)^{1.4}) =  C/4 n^{1.47}(1.00333\dots) \ge C/4 n^{1.4}.\]
+
+Meanwhile, if $i \ge 0.26 n > 900 $, then $A_i' \le \textbf{b}' \le \textbf{logg}(i)$. Now,
+
+\[g(\textbf{log}(i)+n-i) \ge C/4 n^{1.47} \left((i/n)^{1.47}\sum_{k=1}^{300} \frac{1}{k^{1.47}} + (1-i/n)^{1.47}\right).\]
+
+Treating $i/n$ as variable $r \in [0.26,0.5]$, we can easily verify that $r^{1.47} \sum_{k=1}^{300} \frac{1}{k^{1.47}} + (1-r)^{1.47} \ge 1$ on this domain, finishing our result. A quick check on WolframAlpha reveals that this inequality is positive for $r\in[0.25973,1]$, which is more than sufficient. $\blacksquare$
+
+We note that letting $h(1) =1, h(n) = \min_{1\le i \le n/2} \{ h(n-i)+\min\{h(\textbf{log}(i)),h(\lfloor n/2\rfloor )\}\}$, a quick numeric check seems to to indicate that $h(n) = \Theta(n^{\log(30)/\log(10)}) \approx n^{1.477\dots}$. Thus, this seems close to the best possible one can achieve without more sophisticated ideas.
 
 
+Finally, we note that defining $\textbf{logg}(n)$ to be $\textbf{log}(n)$ except with the largest letter being replaced by $\lfloor n/2\rfloor$, we have that $A_n' \le \textbf{logg}(n)$ and $A_n' \le \textbf{b} \implies \textbf{logg}(n)\le \textbf{b}$.
+
+We have that this gives an upper bound for $g$, of $O(n^x)$, where $x$ satisfies $1/2^x+ \sum_{k=2}^\infty 1/k^x \le 1\iff \zeta(x) +1/2^x\le 2 $ thus we may take $x = 1.9133$.
 
 
+For $\textbf{b}'$, the $t$-th largest letter $b_t$, we should have that $(t-1)(b_t+1) \ge i$ or $(t+1)(b_t+1) > n$ and $t(b_t) \ge i$. Thus $b_t+1 \ge \min\{ rn/(t-1), n/(t+1)\}$ and $b_t \ge rn/t$
 
+Now, $Sort(A_n')\preceq Sort(n/2,n/3 + \textbf{log}(n/2))) $. This gives a yeild to a bound of $g(n) = O(n^{1.77})$, as $x=1.77$ satisfies $1/2^x + 1/3^x +(1/2^x)\zeta(x)<1$.
 
 \end{document}
